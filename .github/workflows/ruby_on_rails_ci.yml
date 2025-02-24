@@ -1,0 +1,79 @@
+name: Rails CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/subscription-coupon-discount-development_test
+
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: subscription-coupon-discount-development_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.2.2
+
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20.12.2'
+
+    - name: Install PostgreSQL client
+      run: sudo apt-get install libpq-dev
+
+    - name: Install libvips (required for ruby-vips)
+      run: sudo apt-get install -y libvips
+
+    - name: Install Dependencies
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+        yarn install --frozen-lockfile
+      
+    - name: Setup Database
+      env:
+        RAILS_ENV: test
+        DATABASE_URL: postgres://postgres:postgres@localhost:5432/subscription-coupon-discount
+      run: |
+        bin/rails db:create
+        bin/rails db:schema:load
+
+    # Precompile assets
+    - name: Assets Precompile
+      env:
+        RAILS_ENV: test
+      run: bundle exec rake assets:precompile
+
+    - name: Run Rspec
+      env:
+        RAILS_ENV: test
+      run: rspec spec
+
+    - name: Run Linters
+      run: |
+        bundle exec rubocop
+        
