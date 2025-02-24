@@ -12,7 +12,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 0) do
+ActiveRecord::Schema[7.1].define(version: 20_250_224_185_632) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
+
+  create_table 'plans', force: :cascade do |t|
+    t.string 'title'
+    t.integer 'unit_price'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+  end
+
+  create_table 'subscriptions', force: :cascade do |t|
+    t.string 'external_id'
+    t.bigint 'plan_id', null: false
+    t.integer 'seats'
+    t.integer 'unit_price'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['plan_id'], name: 'index_subscriptions_on_plan_id'
+  end
+
+  add_foreign_key 'subscriptions', 'plans'
 end
