@@ -28,6 +28,9 @@ RSpec.describe Subscription, type: :model do
         expect do
           expect(subscription.apply_coupon(coupon.id)).to eq(true)
         end.to change(SubscriptionCoupon, :count).by(1)
+
+        expect(coupon.reload.used_count).to eq(1)
+        expect(subscription.reload.unit_price).to eq(9000)
       end
     end
 
