@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 20_250_224_211_859) do # rubocop:disable Metrics/BlockLength
+ActiveRecord::Schema[7.1].define(version: 20_250_225_112_547) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -23,6 +23,7 @@ ActiveRecord::Schema[7.1].define(version: 20_250_224_211_859) do # rubocop:disab
     t.integer 'used_count', default: 0
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
+    t.check_constraint 'used_count <= max_uses', name: 'check_used_count_within_max_uses'
   end
 
   create_table 'plans', force: :cascade do |t|

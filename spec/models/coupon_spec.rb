@@ -3,6 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe Coupon, type: :model do
+  describe 'associations' do
+    it { should have_many(:subscription_coupons) }
+  end
+
   describe 'validations' do
     subject { build(:coupon) }
 
