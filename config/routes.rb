@@ -9,4 +9,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  resources :subscriptions, only: %i[show] do
+    post 'apply_coupon/:coupon_id', to: 'subscriptions#apply_coupon', as: :apply_coupon, on: :member
+  end
 end
