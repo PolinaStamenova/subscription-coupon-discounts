@@ -15,4 +15,6 @@ Rails.application.routes.draw do
       post 'apply_coupon/:coupon_id', to: 'subscriptions#apply_coupon', as: :apply_coupon, on: :member
     end
   end
+
+  resources :coupons, only: %i[index show new create edit update]
 end

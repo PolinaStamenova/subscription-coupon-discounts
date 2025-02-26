@@ -6,4 +6,24 @@
   body {
     @apply bg-purple-100 m-0 p-0;
   }
+
+  input[type="number"], textarea, select {
+    @apply text-sm w-20 px-4 py-2 border border-gray-300 rounded-lg shadow-sm 
+      transition duration-300 ease-in-out transform 
+      focus:outline-purple-300 
+      hover:shadow-lg hover:border-purple-300 
+      bg-gray-100;
+  }
+
+  input[type='submit'] {
+    @apply bg-purple-400 text-white p-2 rounded-md hover:bg-purple-500 w-40;
+  }
 }
+
+@layer utilities {
+  .back_btn {
+    @apply bg-gray-800 text-white p-2 rounded-md hover:bg-black w-40;
+  }
+}
+
+
