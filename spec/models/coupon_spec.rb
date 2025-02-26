@@ -20,6 +20,25 @@ RSpec.describe Coupon, type: :model do
     it { should validate_numericality_of(:percentage).is_greater_than(0).is_less_than_or_equal_to(100) }
     it { should validate_presence_of(:max_uses) }
     it { should validate_numericality_of(:max_uses).is_greater_than(0) }
+
+    describe '#validate_editable' do
+      context 'coupon is not applied' do
+        it 'updates its' do
+          subject.update(percentage: 50)
+
+          expect(subject.reload).to be_valid
+        end
+      end
+
+      context 'coupon is applied at least once' do
+        it 'does not updates its but throw a validation error' do
+          create(:subscription_coupon, coupon: subject)
+          subject.update(percentage: 50)
+
+          expect(subject.reload.errors.full_messages).to include('Coupon is already in use and cannot be edited')
+        end
+      end
+    end
   end
 
   describe 'callbacks' do
@@ -28,6 +47,20 @@ RSpec.describe Coupon, type: :model do
 
       it 'generates a unique code' do
         expect(coupon.code).to be_present
+      end
+    end
+  end
+
+  describe 'instance methods' do
+    describe '#apllied?' do
+      let!(:coupon) { create(:coupon_with_subscription_coupon) }
+
+      it { expect(coupon.reload.apllied?).to be_truthy }
+
+      it 'returns false if coupon is not applied' do
+        coupon.subscription_coupons.destroy_all
+
+        expect(coupon.reload.apllied?).to be_falsy
       end
     end
   end
