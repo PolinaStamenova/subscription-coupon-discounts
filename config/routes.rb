@@ -8,9 +8,11 @@ Rails.application.routes.draw do
   get 'up' => 'rails/health#show', as: :rails_health_check
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root 'plans#index'
 
-  resources :subscriptions, only: %i[show] do
-    post 'apply_coupon/:coupon_id', to: 'subscriptions#apply_coupon', as: :apply_coupon, on: :member
+  resources :plans, only: %i[index show] do
+    resources :subscriptions, only: %i[create show] do
+      post 'apply_coupon/:coupon_id', to: 'subscriptions#apply_coupon', as: :apply_coupon, on: :member
+    end
   end
 end
