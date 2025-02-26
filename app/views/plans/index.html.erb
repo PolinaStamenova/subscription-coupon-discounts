@@ -1,0 +1,12 @@
+<h1 class='text-xl font-medium text-center'>Available Plans</h1>
+
+<ul class='flex gap-4 mt-4 items-center justify-center'>
+  <% @plans.each do |plan| %>
+    <%= link_to plan_path(plan) do %>
+      <li class = 'rounded-xl p-4 bg-purple-200 shadow-md flex flex-col gap-6 w-40 break-words hover:shadow-lg hover:bg-purple-300 text-center'>
+        <h2 class='font-medium'><%= plan.title %></h2>
+        <span class='text-purple-500 font-medium'><%= number_to_currency(plan.unit_price_in_euros, unit: "€") %></span>
+      </li>
+    <% end %> 
+  <% end %> 
+</ul>

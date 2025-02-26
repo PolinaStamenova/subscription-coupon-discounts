@@ -9,6 +9,10 @@ class Subscription < ApplicationRecord
   # Validations
   validates :unit_price, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
+  def unit_price_in_euros
+    unit_price.to_f / 100
+  end
+
   def apply_coupon(coupon_id)
     return false if subscription_coupons.exists? # Ensure only one coupon is applied per subscription
 
