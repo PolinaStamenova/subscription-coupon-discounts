@@ -76,5 +76,14 @@ RSpec.describe Subscription, type: :model do
       expect(coupon.reload.used_count).to be <= 2
       expect(SubscriptionCoupon.count).to be <= 2
     end
+
+    context 'when a coupon is already applied at least once' do
+      it 'does not apply it and returns false' do
+        create(:subscription_coupon, subscription:, coupon:)
+
+        expect(subscription.apply_coupon(coupon.id)).to eq(false)
+        expect(SubscriptionCoupon.where(subscription:, coupon:).count).to eq(1)
+      end
+    end
   end
 end
