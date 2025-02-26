@@ -8,4 +8,10 @@ FactoryBot.define do
     seats { 2 }
     unit_price { plan.unit_price }
   end
+
+  factory :subscription_with_coupon, parent: :subscription do
+    after(:create) do |subscription|
+      create(:subscription_coupon, subscription:, coupon: create(:coupon))
+    end
+  end
 end

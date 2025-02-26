@@ -10,6 +10,8 @@ class Subscription < ApplicationRecord
   validates :unit_price, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   def apply_coupon(coupon_id)
+    return false if subscription_coupons.exists? # Ensure only one coupon is applied per subscription
+
     ActiveRecord::Base.transaction do
       coupon = Coupon.active.lock('FOR UPDATE').find_by(id: coupon_id)
 
