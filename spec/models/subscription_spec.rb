@@ -86,4 +86,29 @@ RSpec.describe Subscription, type: :model do
       end
     end
   end
+
+  describe '#remove_coupon' do
+    let(:plan) { create(:plan, unit_price: 10_000) }
+    let(:subscription) { create(:subscription, plan:) }
+    let(:coupon) { create(:coupon, percentage: 10) }
+
+    before { subscription.apply_coupon(coupon.id) }
+
+    it 'removes the coupon and resets the unit price to the original plan price' do
+      expect(coupon.reload.used_count).to eq(1)
+      expect(subscription.reload.unit_price).to eq(9000)
+
+      expect do
+        expect(subscription.remove_coupon(coupon.id)).to eq(true)
+      end.to change(SubscriptionCoupon, :count).by(-1)
+                                               .and have_enqueued_job(NotifyPaymentProviderJob).with(subscription.id)
+
+      expect(coupon.reload.used_count).to eq(0)
+      expect(subscription.reload.unit_price).to eq(10_000)
+    end
+
+    it 'returns false when coupon is not found' do
+      expect(subscription.remove_coupon(9999)).to eq(false)
+    end
+  end
 end
