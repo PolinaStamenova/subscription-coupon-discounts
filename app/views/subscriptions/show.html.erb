@@ -13,7 +13,7 @@
         <% @subscription.coupons.each do |coupon| %>
           <li class='text-purple-500 font-medium flex gap-2 items-center'>
             <p>Coupon: <%= coupon.code %> with <%= coupon.percentage %>% discount</p>
-  <span class='text-purple-500 font-medium'>Price: <%= number_to_currency(@subscription.unit_price_in_euros, unit: "€") %></span>
+            <%= button_to "Remove Coupon", remove_coupon_plan_subscription_path(@subscription.plan, @subscription, coupon_id: coupon.id), method: :delete, class: 'text-xs p-2 rounded-md w-40 text-white hover:bg-red-500 bg-red-400 self-center' %>
           </li>
         <% end %>
       </ul>

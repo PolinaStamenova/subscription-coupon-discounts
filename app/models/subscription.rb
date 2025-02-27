@@ -56,7 +56,23 @@ class Subscription < ApplicationRecord
 
   def process_coupon_removal(subscription_coupon, coupon)
     subscription_coupon.destroy!
-    update!(unit_price: plan.unit_price) # Reset the unit price to the original plan price
+    update_unit_price
     coupon.decrement!(:used_count)
+  end
+
+  def update_unit_price
+    update!(unit_price: calculate_discounted_price)
+  end
+
+  def calculate_discounted_price
+    # Reset the unit price to the original plan price if no other coupons are applied
+    return plan.unit_price if coupons.none?
+
+    total_discount = [total_discount_percentage, 100].min
+    (plan.unit_price * (1 - total_discount.to_f / 100)).round(2)
+  end
+
+  def total_discount_percentage
+    coupons.pluck(:percentage).sum
   end
 end

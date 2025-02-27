@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :plans, only: %i[index show] do
     resources :subscriptions, only: %i[create show] do
       post 'apply_coupon', to: 'subscriptions#apply_coupon', as: :apply_coupon, on: :member
+      delete 'remove_coupon/:coupon_id', to: 'subscriptions#remove_coupon', as: :remove_coupon, on: :member
     end
   end
 

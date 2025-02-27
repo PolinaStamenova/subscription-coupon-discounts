@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class SubscriptionsController < ApplicationController
-  before_action :set_subscription, only: %i[show apply_coupon]
-  before_action :set_plan, only: %i[create apply_coupon]
+  before_action :set_subscription, only: %i[show apply_coupon remove_coupon]
+  before_action :set_plan, only: %i[create apply_coupon remove_coupon]
 
   def show; end
 
@@ -24,6 +24,15 @@ class SubscriptionsController < ApplicationController
     else
       redirect_to plan_subscription_path(@plan, @subscription),
                   alert: 'Invalid coupon or it has reached its maximum uses.'
+    end
+  end
+
+  def remove_coupon
+    if @subscription.remove_coupon(params[:coupon_id])
+      redirect_to plan_subscription_path(@plan, @subscription), notice: 'Coupon has been successfully removed.'
+    else
+      redirect_to plan_subscription_path(@plan, @subscription),
+                  alert: 'Coupon could not be remived. Please try again.'
     end
   end
 
