@@ -33,7 +33,7 @@ class SubscriptionsController < ApplicationController
 
   def remove_coupon
     if @subscription.remove_coupon(params[:coupon_id])
-      redirect_to plan_subscription_path(@plan, @subscription), notice: 'Coupon has been successfully removed.'
+      redirect_to plan_subscription_path(@plan, @subscription), alert: 'Coupon has been successfully removed.'
     else
       redirect_to plan_subscription_path(@plan, @subscription),
                   alert: 'Coupon could not be remived. Please try again.'
