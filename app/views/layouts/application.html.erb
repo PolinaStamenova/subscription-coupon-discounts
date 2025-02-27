@@ -12,8 +12,11 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 text-center">
-      <%= yield %>
-    </main>
+      <div class='flex'>
+        <%= render "layouts/navigation" %>
+        <main class="container mx-auto mt-28 px-5 text-center">
+          <%= yield %>
+        </main>
+    </div>
   </body>
 </html>
