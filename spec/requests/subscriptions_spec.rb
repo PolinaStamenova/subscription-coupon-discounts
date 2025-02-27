@@ -3,6 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe 'Subscriptions', type: :request do
+  describe 'GET /index' do
+    let(:subscription) { create(:subscription) }
+
+    it 'renders the show template' do
+      get plan_subscriptions_path(subscription.plan)
+
+      expect(response.body).to include("Subscriptions for #{subscription.plan.title}")
+    end
+  end
+
   describe 'GET /show' do
     let(:subscription) { create(:subscription) }
 

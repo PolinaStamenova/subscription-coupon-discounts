@@ -2,7 +2,11 @@
 
 class SubscriptionsController < ApplicationController
   before_action :set_subscription, only: %i[show apply_coupon remove_coupon]
-  before_action :set_plan, only: %i[create apply_coupon remove_coupon]
+  before_action :set_plan, only: %i[index create apply_coupon remove_coupon]
+
+  def index
+    @subscriptions = @plan.subscriptions.order(created_at: :desc)
+  end
 
   def show; end
 

@@ -1,6 +1,8 @@
-<div class='w-96 mx-auto p-4 w-2/5 text-center bg-purple-200 rounded-xl shadow-md flex flex-col gap-6 items-center justify-center'>
+<div class='container_style'>
   <h2 class='font-medium'><%= @plan.title %></h2>
   <span class='text-purple-500 font-medium'><%= number_to_currency(@plan.unit_price_in_euros, unit: "€") %></span>
 
-  <%= button_to "Subscribe", plan_subscriptions_path(@plan), method: :post, class: 'bg-purple-400 text-white p-2 rounded-md hover:bg-purple-500 w-40' %>
+  <%= link_to "See subscriptions", plan_subscriptions_path(@plan), class: "action_btn self-center" %>
+
+  <%= button_to "Subscribe", plan_subscriptions_path(@plan), method: :post, class: 'action_btn' %>
 </div>

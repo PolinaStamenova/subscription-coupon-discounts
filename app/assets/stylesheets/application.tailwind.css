@@ -24,6 +24,14 @@
   .back_btn {
     @apply bg-gray-800 text-white p-2 rounded-md hover:bg-black w-40 self-center;
   }
+
+  .container_style {
+    @apply w-96 mx-auto p-4 text-center bg-purple-200 rounded-xl shadow-md flex flex-col gap-6 items-center justify-center;
+  }
+
+  .action_btn {
+    @apply bg-purple-400 text-white p-2 rounded-md hover:bg-purple-500 w-40;
+  }
 }
 
 
