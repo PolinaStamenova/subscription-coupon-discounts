@@ -13,11 +13,11 @@ class Subscription < ApplicationRecord
     unit_price.to_f / 100
   end
 
-  def apply_coupon(coupon_id)
-    return false if subscription_coupons.exists? # Ensure only one coupon is applied per subscription
+  def apply_coupon(coupon_code)
+    return false if unit_price.zero? # Ensure coupon is not applied if the subscription is free already
 
     ActiveRecord::Base.transaction do
-      coupon = Coupon.active.lock('FOR UPDATE').find_by(id: coupon_id)
+      coupon = Coupon.active.lock('FOR UPDATE').find_by(code: coupon_code)
 
       return false if coupon.nil? || coupon.invalid?
 
@@ -27,7 +27,7 @@ class Subscription < ApplicationRecord
       true
     end
   rescue ActiveRecord::RecordInvalid, ActiveRecord::StatementInvalid => e
-    Rails.logger.error("Coupon (ID: #{coupon_id}) application failed: #{e.message}")
+    Rails.logger.error("Coupon (Code: #{coupon_code}) application failed: #{e.message}")
     false
   end
 
@@ -56,7 +56,23 @@ class Subscription < ApplicationRecord
 
   def process_coupon_removal(subscription_coupon, coupon)
     subscription_coupon.destroy!
-    update!(unit_price: plan.unit_price) # Reset the unit price to the original plan price
+    update_unit_price
     coupon.decrement!(:used_count)
+  end
+
+  def update_unit_price
+    update!(unit_price: calculate_discounted_price)
+  end
+
+  def calculate_discounted_price
+    # Reset the unit price to the original plan price if no other coupons are applied
+    return plan.unit_price if coupons.none?
+
+    total_discount = [total_discount_percentage, 100].min
+    (plan.unit_price * (1 - total_discount.to_f / 100)).round(2)
+  end
+
+  def total_discount_percentage
+    coupons.pluck(:percentage).sum
   end
 end

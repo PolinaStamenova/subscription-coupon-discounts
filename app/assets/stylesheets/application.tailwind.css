@@ -22,7 +22,7 @@
 
 @layer utilities {
   .back_btn {
-    @apply bg-gray-800 text-white p-2 rounded-md hover:bg-black w-40;
+    @apply bg-gray-800 text-white p-2 rounded-md hover:bg-black w-40 self-center;
   }
 }
 
