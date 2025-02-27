@@ -19,7 +19,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def apply_coupon
-    if @subscription.apply_coupon(params[:coupon_id])
+    if @subscription.apply_coupon(apply_coupon_params[:coupon_code])
       redirect_to plan_subscription_path(@plan, @subscription), notice: 'Coupon has been successfully applied.'
     else
       redirect_to plan_subscription_path(@plan, @subscription),
@@ -35,5 +35,9 @@ class SubscriptionsController < ApplicationController
 
   def set_plan
     @plan = Plan.find(params[:plan_id])
+  end
+
+  def apply_coupon_params
+    params.require(:subscription).permit(:coupon_code)
   end
 end

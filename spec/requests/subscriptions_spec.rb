@@ -48,7 +48,8 @@ RSpec.describe 'Subscriptions', type: :request do
     let(:coupon) { create(:coupon) }
 
     it 'applies a coupon to a subscription' do
-      post apply_coupon_plan_subscription_path(subscription.plan, subscription, coupon.id)
+      post apply_coupon_plan_subscription_path(subscription.plan, subscription),
+           params: { subscription: { coupon_code: coupon.code } }
 
       expect(response).to redirect_to(plan_subscription_path(subscription.plan, subscription))
       expect(flash[:notice]).to eq('Coupon has been successfully applied.')
@@ -58,7 +59,8 @@ RSpec.describe 'Subscriptions', type: :request do
       coupon.update!(max_uses: 1)
 
       2.times do
-        post apply_coupon_plan_subscription_path(subscription.plan, subscription, coupon.id)
+        post apply_coupon_plan_subscription_path(subscription.plan, subscription),
+             params: { subscription: { coupon_code: coupon.code } }
       end
 
       expect(response).to redirect_to(plan_subscription_path(subscription.plan, subscription))

@@ -17,6 +17,7 @@ class SubscriptionCoupon < ApplicationRecord
   end
 
   def calculate_discounted_price
-    subscription.plan.unit_price * (1 - coupon.percentage.to_f / 100)
+    total_discount = [subscription.coupons.pluck(:percentage).sum, 100].min
+    (subscription.plan.unit_price * (1 - total_discount.to_f / 100)).round(2)
   end
 end

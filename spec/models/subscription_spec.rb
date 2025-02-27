@@ -26,7 +26,7 @@ RSpec.describe Subscription, type: :model do
         coupon.update!(percentage: 10)
 
         expect do
-          expect(subscription.apply_coupon(coupon.id)).to eq(true)
+          expect(subscription.apply_coupon(coupon.code)).to eq(true)
         end.to change(SubscriptionCoupon, :count).by(1)
 
         expect(coupon.reload.used_count).to eq(1)
@@ -52,9 +52,9 @@ RSpec.describe Subscription, type: :model do
       it 'returns false' do
         allow(SubscriptionCoupon).to receive(:create!).and_raise(ActiveRecord::RecordInvalid)
 
-        expect(subscription.apply_coupon(coupon.id)).to eq(false)
+        expect(subscription.apply_coupon(coupon.code)).to eq(false)
         expect(Rails.logger).to have_received(:error)
-          .with("Coupon (ID: #{coupon.id}) application failed: Record invalid")
+          .with("Coupon (Code: #{coupon.code}) application failed: Record invalid")
       end
     end
 
@@ -92,7 +92,7 @@ RSpec.describe Subscription, type: :model do
     let(:subscription) { create(:subscription, plan:) }
     let(:coupon) { create(:coupon, percentage: 10) }
 
-    before { subscription.apply_coupon(coupon.id) }
+    before { subscription.apply_coupon(coupon.code) }
 
     it 'removes the coupon and resets the unit price to the original plan price' do
       expect(coupon.reload.used_count).to eq(1)
@@ -108,7 +108,7 @@ RSpec.describe Subscription, type: :model do
     end
 
     it 'returns false when coupon is not found' do
-      expect(subscription.remove_coupon(9999)).to eq(false)
+      expect(subscription.remove_coupon(999)).to eq(false)
     end
   end
 end

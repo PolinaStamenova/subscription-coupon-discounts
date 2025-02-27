@@ -1,5 +1,33 @@
-<div class = 'rounded-xl p-4 bg-purple-200 shadow-md flex flex-col gap-6 w-60 text-center'>
-  <h2 class='text-xl font-medium'>Subscription details for <%= @subscription.plan.title %></h2>
-  <span class='text-purple-500 font-medium'>Seats: <%= @subscription.seats %></span>
+<div class="flex justify-center">
+  <div class = 'rounded-xl p-4 bg-purple-200 shadow-md flex flex-col gap-2 justify-center'>
+    <h1 class='text-lg font-medium'>Subscription details for <%= @subscription.plan.title %></h1>
+
+    <div class='flex flex-col gap-2 items-start bg-purple-100 p-3 rounded-md'>
+      <span class='text-purple-500 font-medium'>Seats: <%= @subscription.seats %></span>
+      <span class='text-purple-500 font-medium'>Plan price: <%= number_to_currency(@subscription.plan.unit_price_in_euros, unit: "€") %></span>
+
+      <span>---------------------</span>
+      <span class='text-purple-500 font-medium'> <%= @subscription.coupons.count %> coupons aplied with</span>
+
+      <ul class='flex flex-col gap-2'>
+        <% @subscription.coupons.each do |coupon| %>
+          <li class='text-purple-500 font-medium flex gap-2 items-center'>
+            <p>Coupon: <%= coupon.code %> with <%= coupon.percentage %>% discount</p>
   <span class='text-purple-500 font-medium'>Price: <%= number_to_currency(@subscription.unit_price_in_euros, unit: "€") %></span>
+          </li>
+        <% end %>
+      </ul>
+
+      <span>---------------------</span>
+
+      <span class='text-purple-500 font-medium'>Total price: <%= number_to_currency(@subscription.unit_price_in_euros, unit: "€")%> </span>
+    </div>
+
+    <%= form_with url: apply_coupon_plan_subscription_path(@subscription.plan, @subscription), method: :post, local: true do |form| %>
+      <div class='flex gap-2'>
+        <%= form.text_field :coupon_code, name: 'subscription[coupon_code]', class: 'p-2 rounded-md border border-purple-300', placeholder: 'Enter Coupon Code' %>
+        <%= form.submit "Apply Coupon", class: 'p-2 rounded-md w-40 text-white hover:bg-purple-500 bg-purple-400 self-center', disabled: @subscription.unit_price.zero? %>
+      </div>
+    <% end %>
+  </div>
 </div>

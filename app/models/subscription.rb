@@ -13,11 +13,11 @@ class Subscription < ApplicationRecord
     unit_price.to_f / 100
   end
 
-  def apply_coupon(coupon_id)
-    return false if subscription_coupons.exists? # Ensure only one coupon is applied per subscription
+  def apply_coupon(coupon_code)
+    return false if unit_price.zero? # Ensure coupon is not applied if the subscription is free already
 
     ActiveRecord::Base.transaction do
-      coupon = Coupon.active.lock('FOR UPDATE').find_by(id: coupon_id)
+      coupon = Coupon.active.lock('FOR UPDATE').find_by(code: coupon_code)
 
       return false if coupon.nil? || coupon.invalid?
 
@@ -27,7 +27,7 @@ class Subscription < ApplicationRecord
       true
     end
   rescue ActiveRecord::RecordInvalid, ActiveRecord::StatementInvalid => e
-    Rails.logger.error("Coupon (ID: #{coupon_id}) application failed: #{e.message}")
+    Rails.logger.error("Coupon (Code: #{coupon_code}) application failed: #{e.message}")
     false
   end
 
