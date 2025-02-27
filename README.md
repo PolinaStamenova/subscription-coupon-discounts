@@ -25,16 +25,16 @@ This project implements a **subscription-based system** where users can subscrib
 
 ### **Installation**
 ```
-  git clone https://github.com/PolinaStamenova/subscription-coupon-discounts.git
+git clone https://github.com/PolinaStamenova/subscription-coupon-discounts.git
 ```
 ```
-  cd your-project-directory
+cd your-project-directory
 ```
 ```
-  bundle install
+bundle install
 ```
 ```
-  rails db:setup
+rails db:setup
 ```
 
 ### **Run the app locally**
