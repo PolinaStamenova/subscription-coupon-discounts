@@ -10,6 +10,11 @@ This project implements a **subscription-based system** where users can subscrib
 - **Background Processing**: Uses Sidekiq to notify the external payment provider asynchronously.
 - **Coupon Removal**: Removing a coupon restores the subscription price.
 
+## [Video Link](https://www.loom.com/share/4ca80355d94a43f88d33bcf054c89130)
+
+## Project Image
+<img src="app/assets/images/project_image.png" alt="Project image" width="400"/>
+
 ## Setup Instructions
 
 ### **Prerequisites**
