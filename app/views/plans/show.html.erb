@@ -2,5 +2,7 @@
   <h2 class='font-medium'><%= @plan.title %></h2>
   <span class='text-purple-500 font-medium'><%= number_to_currency(@plan.unit_price_in_euros, unit: "€") %></span>
 
+  <%= link_to "See subscriptions", plan_subscriptions_path(@plan), class: "action_btn self-center" %>
+
   <%= button_to "Subscribe", plan_subscriptions_path(@plan), method: :post, class: 'action_btn' %>
 </div>

@@ -1,0 +1,13 @@
+<h1 class='text-xl font-medium text-center'>Subscriptions for <%= @plan.title %></h1>
+<p class='text-xl font-medium text-center'>Plan price:<%= number_to_currency(@plan.unit_price_in_euros, unit: "€") %></p>
+
+<ul class='flex flex-col gap-4 mt-4 items-center justify-center'>
+  <% @subscriptions.each do |subscription| %>
+    <%= link_to plan_subscription_path(@plan, subscription) do %>
+      <li class = 'rounded-xl p-4 bg-purple-200 shadow-md flex gap-6 break-words hover:shadow-lg hover:bg-purple-300 text-center'>
+        <p class='font-medium'>Subscription (ID: <%= subscription.id%>) price: <%= number_to_currency(subscription.unit_price_in_euros, unit: "€") %></p>
+        <p class='font-medium'>Applied coupons: <%= subscription.coupons.count %></p>
+      </li>
+    <% end %> 
+  <% end %> 
+</ul>
