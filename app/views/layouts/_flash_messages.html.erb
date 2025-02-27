@@ -1,0 +1,5 @@
+<% flash.each do |type, message| %>
+    <div data-controller="flash" class="fixed top-0 right-0 m-4 rounded-xl p-6 <%= tailwind_class_for(type) %>">
+        <%= message %>
+    </div>
+<% end %>

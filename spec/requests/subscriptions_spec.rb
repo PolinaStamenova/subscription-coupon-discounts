@@ -95,7 +95,7 @@ RSpec.describe 'Subscriptions', type: :request do
 
         expect(subscription.reload.unit_price).to eq(10_000)
         expect(response).to redirect_to(plan_subscription_path(subscription.plan, subscription))
-        expect(flash[:notice]).to eq('Coupon has been successfully removed.')
+        expect(flash[:alert]).to eq('Coupon has been successfully removed.')
       end
     end
 
@@ -112,7 +112,7 @@ RSpec.describe 'Subscriptions', type: :request do
 
         expect(subscription.reload.unit_price).to eq(9500)
         expect(response).to redirect_to(plan_subscription_path(subscription.plan, subscription))
-        expect(flash[:notice]).to eq('Coupon has been successfully removed.')
+        expect(flash[:alert]).to eq('Coupon has been successfully removed.')
       end
     end
 
