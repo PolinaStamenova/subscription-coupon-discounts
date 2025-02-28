@@ -34,9 +34,14 @@ cd your-project-directory
 bundle install
 ```
 ```
-rails db:setup
+rails db:create
+rails db:migrate
 ```
 
+Note: Please run the seed to provide with some Plan data or create some manually from the terminal.
+```
+rails db:seed
+```
 ### **Run the app locally**
 ```
 bin/dev
