@@ -9,3 +9,9 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+# Create plans
+Plan.create!(title: 'Basic Plan', unit_price: 10_000)
+Plan.create!(title: 'Pro Plan', unit_price: 25_000)
+Plan.create!(title: 'Enterprise Plan', unit_price: 50_000)
+Plan.create!(title: 'Plus Plan', unit_price: 93_990)
